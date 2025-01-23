@@ -34,4 +34,115 @@ extension Solution {
     
     return res
   }
+
+  /// 560. Subarray Sum Equals K
+  /// Given an integer array nums and an integer k, find the number of subarrays
+  /// whose sum is equal to k.
+  func subarraySum(_ nums: [Int], _ k: Int) -> Int {
+    var ans = 0
+
+    // Represent how much time given prefix sum occurred.
+    // Empty prefix sum occurred ones, that means 0 sum occurred ones for []
+    // key represents prefix sum and value is how much times it appeared.
+    var counts: [Int: Int] = [0: 1]
+    // Represents current prefix sum
+    var curr = 0
+
+    for n in nums {
+      curr += n
+      // curr - x = k => x = curr - k where x is
+      // prefix sum of any subarray and value for
+      // this prefix sum represents coun of subarrays
+      // whose sum is equal to k
+      ans += counts[curr - k, default: 0]
+
+      // if we recorded `curr` prefix sum occurrence already,
+      // increment it, otherwise set it occurred ones
+      counts[curr, default: 0] += 1
+    }
+
+    return ans
+  }
+
+  /// 1248. Count Number of Nice Subarrays
+  /// Given an array of integers nums and an integer k.
+  /// A continuous subarray is called nice if there are k odd numbers on it.
+  /// Return the number of nice sub-arrays.
+  func numberOfSubarrays(_ nums: [Int], _ k: Int) -> Int {
+    var ans = 0
+    var counts: [Int: Int] = [0: 1]
+    var curr = 0
+
+    for n in nums {
+      curr += n % 2
+      ans += counts[curr - k, default: 0]
+      counts[curr, default: 0] += 1
+    }
+
+    return ans
+  }
+
+  func findWinners(_ matches: [[Int]]) -> [[Int]] {
+    var lostCounts: [Int: Int] = [:]
+    for match in matches {
+      let winner = match[0]
+      let looser = match[1]
+
+      lostCounts[winner, default: 0] += 0
+      lostCounts[looser, default: 0] += 1
+    }
+
+    var lostOnes = [Int]()
+    var noLoses = [Int]()
+
+    for (player, looses) in lostCounts {
+      if looses == 0 {
+        noLoses.append(player)
+      } else if looses == 1 {
+        lostOnes.append(player)
+      }
+    }
+
+    return [noLoses.sorted(), lostOnes.sorted()]
+  }
+
+  func largestUniqueNumber(_ nums: [Int]) -> Int {
+    // key - number, value - count of occurrenses
+    var occurrences: [Int: Int] = [:]
+    for num in nums {
+      occurrences[num, default: 0] += 1
+    }
+
+    for (num, count) in occurrences {
+      if count > 1 {
+        occurrences.removeValue(forKey: num)
+      }
+    }
+
+    return occurrences.keys.max() ?? -1
+  }
+
+  func maxNumberOfBalloons(_ text: String) -> Int {
+    let set = Set("balloon")
+    var counts: [Character: Int] = [:]
+
+    for char in text.lowercased() where set.contains(char) {
+      counts[char, default: 0] += 1
+    }
+
+    guard set == Set(counts.keys) else {
+      return 0
+    }
+
+    counts["l", default: 0] /= 2
+    counts["o", default: 0] /= 2
+
+    return counts.values.min() ?? 0
+  }
+
+  func findMaxLength(_ nums: [Int]) -> Int {
+
+
+    return 0
+  }
 }
