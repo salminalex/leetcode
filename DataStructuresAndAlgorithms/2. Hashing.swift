@@ -140,9 +140,38 @@ extension Solution {
     return counts.values.min() ?? 0
   }
 
-  func findMaxLength(_ nums: [Int]) -> Int {
+  /// 49. Group Anagrams
+  /// Given an array of strings strs, group the anagrams
+  /// together. You can return the answer in any order.
+  func groupAnagrams(_ strs: [String]) -> [[String]] {
+    var anagrams: [[Character]: [String]] = [:]
+    for str in strs {
+      anagrams[str.sorted(), default: []].append(str)
+    }
+    return Array(anagrams.values)
+  }
 
+  /// 2260. Minimum Consecutive Cards to Pick Up
+  /// You are given an integer array cards where cards[i]
+  /// represents the value of the ith card. A pair of cards are
+  /// matching if the cards have the same value.
+  /// Return the minimum number of consecutive cards you
+  /// have to pick up to have a pair of matching cards among
+  /// the picked cards. If it is impossible to have matching cards,
+  /// return -1.
+  func minimumCardPickup(_ cards: [Int]) -> Int {
+    // key - card
+    // value - last stored index for a given card
+    var diffs: [Int: Int] = [:]
+    var ans = Int.max
 
-    return 0
+    for index in cards.indices {
+      if let lastStoredIndex = diffs[cards[index]] {
+        ans = min(ans, index - lastStoredIndex + 1)
+      }
+      diffs[cards[index]] = index
+    }
+
+    return ans == Int.max ? -1 : ans
   }
 }
