@@ -110,4 +110,28 @@ extension Solution {
   func reverseWords(_ s: String) -> String {
     return s.split(separator: " ").map { String($0.reversed()) }.joined(separator: " ")
   }
+
+  /// 3. Longest Substring Without Repeating Characters
+  /// Given a string s, find the length of the longest substring
+  /// without repeating characters.
+  func lengthOfLongestSubstringSlidingWindow(_ s: String) -> Int {
+    guard !s.isEmpty else { return 0 }
+
+    var left = s.startIndex
+    var substring = s[left...left]
+    var ans = 0
+
+    for right in s.indices {
+      substring = s[left...right]
+
+      while Set(substring).count != substring.count {
+        left = s.index(after: left)
+        substring = s[left...right]
+      }
+
+      ans = max(ans, substring.count)
+    }
+
+    return ans
+  }
 }

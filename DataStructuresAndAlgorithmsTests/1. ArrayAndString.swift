@@ -27,4 +27,10 @@ struct ArrayAndStringTests {
     let res = sol.getAverages([7,4,3,9,1,8,5,2,6], 3)
     #expect(res == [-1,-1,-1,5,4,4,-1,-1,-1])
   }
+
+  @Test
+  func lengthOfLongestSubstringSlidingWindow() async throws {
+    #expect(sol.lengthOfLongestSubstringSlidingWindow("abcabcbb") == 3)
+    #expect(sol.lengthOfLongestSubstringSlidingWindow(" ") == 1)
+  }
 }
