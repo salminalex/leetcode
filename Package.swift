@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
   name: "LeetCode",
+  platforms: [.iOS(.v16), .macOS(.v13)],
   products: [
     .library(
       name: "DataStructuresAndAlgorithms",
