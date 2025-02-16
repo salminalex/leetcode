@@ -5,7 +5,7 @@ import Solution
 @Suite("4. StacksAndQueues")
 struct StacksAndQueuesTests {
   @Test
-  func foo() async throws {
-
+  func makeGood() async throws {
+    #expect(sol.makeGood("leEeetcode") == "leetcode")
   }
 }
