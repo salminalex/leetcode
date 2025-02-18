@@ -8,7 +8,7 @@ extension Solution {
 
     for char in s {
       switch char {
-        case "(", "{", "[":
+      case "(", "{", "[":
         openedStack.append(String(char))
       case ")":
         if openedStack.popLast() != "("  {
@@ -97,5 +97,44 @@ extension Solution {
       }
     }
     return String(goodChars)
+  }
+
+  /// 933. Number of Recent Calls
+  class RecentCounter {
+    private var recentRequests: Queue<Int>
+
+    init() {
+      self.recentRequests = .init()
+    }
+
+    func ping(_ t: Int) -> Int {
+      // remove outdated calls
+      let range = (t-3000)...t
+      while let first = recentRequests.peek(), !range.contains(first) {
+        recentRequests.dequeue()
+      }
+
+      recentRequests.enqueue(t)
+
+      return recentRequests.length
+    }
+  }
+
+  /// 346. Moving Average from Data Stream
+  class MovingAverage {
+    private let size: Int
+    private var stream: [Int]
+
+    init(_ size: Int) {
+      self.size = size
+      self.stream = []
+    }
+
+    func next(_ val: Int) -> Double {
+      stream.append(val)
+      let slice = stream.suffix(size)
+      let sum = slice.reduce(0, +)
+      return Double(sum) / Double(slice.count)
+    }
   }
 }
