@@ -137,4 +137,79 @@ extension Solution {
       return Double(sum) / Double(slice.count)
     }
   }
+
+  /// 739. Daily Temperatures
+  func dailyTemperatures(_ temperatures: [Int]) -> [Int] {
+    var ans = Array(repeating: 0, count: temperatures.count)
+    var stack = [Int]()
+
+    for i in temperatures.indices {
+      while !stack.isEmpty, temperatures[stack.last!] < temperatures[i] {
+        let j = stack.removeLast()
+        ans[j] = i - j
+      }
+      stack.append(i)
+    }
+    return ans
+  }
+
+  /// 239. Sliding Window Maximum
+  func maxSlidingWindowBF(_ nums: [Int], _ k: Int) -> [Int] {
+    var ans = [Int]()
+
+    for i in 0...(nums.count - k) {
+      var windMax = Int.min
+      for j in i..<i+k {
+        windMax = max(windMax, nums[j])
+      }
+      ans.append(windMax)
+    }
+
+    return ans
+  }
+
+  func maxSlidingWindow(_ nums: [Int], _ k: Int) -> [Int] {
+    let deueue: Dequeue<Int> = .init()
+    var ans = [Int]()
+
+    for currIndex in nums.indices {
+      // maintain monotonically decreasing stack
+      while let minIndex = deueue.last, nums[minIndex] < nums[currIndex] {
+        deueue.removeLast()
+      }
+      deueue.addLast(currIndex)
+
+      // remove index of first max element if it's outside of the window
+      if (currIndex - k) == deueue.first {
+        deueue.removeFirst()
+      }
+
+      // add max to answer when reached window size
+      if let maxIndex = deueue.first, currIndex >= k - 1 {
+        ans.append(nums[maxIndex])
+      }
+    }
+
+    return ans
+  }
+
+  func nextGreaterElement(_ nums1: [Int], _ nums2: [Int]) -> [Int] {
+    var ans = [Int]()
+    var map = [Int: Int]()
+
+    for num in nums1 {
+      guard let index = nums2.firstIndex(of: num) else {
+        ans.append(-1)
+        continue
+      }
+
+      if let res = nums2[index..<nums2.endIndex].first(where: { $0 > num }) {
+        ans.append(res)
+      } else {
+        ans.append(-1)
+      }
+    }
+
+    return ans
+  }
 }
