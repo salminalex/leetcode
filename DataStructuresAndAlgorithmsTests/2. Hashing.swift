@@ -5,6 +5,12 @@ import Solution
 @Suite("2. Hashing")
 struct HashingTests {
   @Test
+  func twoSum() async throws {
+    let res = sol.twoSum([2,7,11,15], 9)
+    #expect(res == [0, 1])
+  }
+
+  @Test
   func checkIfPalindrome() async throws {
     let res = sol.checkIfPangram("thequickbrownfoxjumpsoverthelazydog")
     #expect(res == true)
@@ -50,20 +56,25 @@ struct HashingTests {
   }
 
   @Test
-  func lengthOfLongestSubstring() async throws {
-    #expect(sol.lengthOfLongestSubstringSlidingWindow("abcabcbb") == 3)
-    #expect(sol.lengthOfLongestSubstringSlidingWindow(" ") == 1)
-  }
-
-  @Test
   func lengthOfLongestSubstringHashMap() async throws {
     #expect(sol.lengthOfLongestSubstring("abcabcbb") == 3)
     #expect(sol.lengthOfLongestSubstring(" ") == 1)
     #expect(sol.lengthOfLongestSubstring("abba") == 2)
   }
 
+  @Test
   func findLucky() async throws {
     #expect(sol.findLucky([2,2,3,4]) == 2)
   }
 
+  @Test
+  func findMaxLength() async throws {
+    #expect(sol.findMaxLength([0,1]) == 2)
+    #expect(sol.findMaxLength([0,1,1,1,1,1,0,0,0]) == 6)
+  }
+
+  @Test
+  func numIdenticalPairs() async throws {
+    #expect(sol.numIdenticalPairs([1,2,3,1,1,3]) == 4)
+  }
 }

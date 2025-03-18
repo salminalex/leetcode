@@ -195,7 +195,6 @@ extension Solution {
 
   func nextGreaterElement(_ nums1: [Int], _ nums2: [Int]) -> [Int] {
     var ans = [Int]()
-    var map = [Int: Int]()
 
     for num in nums1 {
       guard let index = nums2.firstIndex(of: num) else {

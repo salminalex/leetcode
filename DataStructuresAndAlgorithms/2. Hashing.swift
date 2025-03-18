@@ -2,6 +2,25 @@ import Foundation
 import Solution
 
 extension Solution {
+  // 1. Two Sum
+  func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+    // key - desired second num
+    // value - index of first num for desired diff
+    var diff = [Int: Int](minimumCapacity: nums.count)
+
+    // num[i] + num[j] = target
+    // num[j] = target - num[i]
+    for (j, num) in nums.enumerated() {
+      if let i = diff[num] {
+        return [i, j]
+      } else {
+        diff[target - num] = j
+      }
+    }
+
+    fatalError("No pair found")
+  }
+
   func checkIfPangram(_ sentence: String) -> Bool {
     var alphabet = Set("abcdefghijklmnopqrstuvwxyz")
     for char in sentence {
@@ -268,15 +287,17 @@ extension Solution {
   func lengthOfLongestSubstring(_ s: String) -> Int {
     guard !s.isEmpty else { return 0 }
 
-    var chars: [Character: String.Index] = [:]
+    var lastOccurrenceIndex: [Character: String.Index] = [:]
     var left = s.startIndex
     var ans = 0
 
-    for (char, right) in zip(s, s.indices) {
-      if let lastIndex = chars[char], lastIndex >= left {
+    for right in s.indices {
+      let char = s[right]
+
+      if let lastIndex = lastOccurrenceIndex[char], lastIndex >= left {
         left = s.index(after: lastIndex)
       }
-      chars[char] = right
+      lastOccurrenceIndex[char] = right
       ans = max(ans, s[left...right].count)
     }
 
@@ -362,6 +383,111 @@ extension Solution {
     var ans = -1
     for (num, frequency) in frequencies where num == frequency {
       ans = max(ans, num)
+    }
+
+    return ans
+  }
+
+  /// 525. Contiguous Array
+  func findMaxLengthBF(_ nums: [Int]) -> Int {
+    var ans = 0
+
+    for i in nums.indices {
+      var zeroCount = 0
+      var oneCount = 0
+
+      for j in i..<nums.endIndex {
+        if nums[j] == 0 {
+          zeroCount += 1
+        }
+
+        else if nums[j] == 1 {
+          oneCount += 1
+        }
+
+        if zeroCount == oneCount {
+          ans = max(ans, j - i + 1)
+        }
+      }
+    }
+    return ans
+  }
+
+  func findMaxLengthArray(_ nums: [Int]) -> Int {
+    var count = 0
+    var ans = 0
+    var counts = Array(repeating: -2, count: 2 * nums.count + 1)
+    counts[nums.count] = -1
+
+    for i in nums.indices {
+      count += nums[i] == 0 ? 1 : -1
+      if counts[count + nums.count] >= -1 {
+        ans = max(ans, i - counts[count + nums.count])
+      } else {
+        counts[count + nums.count] = i
+      }
+    }
+
+    return ans
+  }
+
+  func findMaxLength(_ nums: [Int]) -> Int {
+    var count = 0
+    var ans = 0
+    // key - diff
+    // value - index
+    var counts = [Int: Int](minimumCapacity: nums.count)
+    counts[0] = -1
+
+    for i in nums.indices {
+      count += nums[i] == 0 ? 1 : -1
+
+      if let j = counts[count] {
+        ans = max(ans, i - j)
+      } else {
+        counts[count] = i
+      }
+    }
+
+    return ans
+  }
+
+  /// 1207. Unique Number of Occurrences
+  func uniqueOccurrences(_ arr: [Int]) -> Bool {
+    var counts = [Int: Int]()
+
+    for num in arr {
+      counts[num, default: 0] += 1
+    }
+
+    return Set(counts.values).count == counts.values.count
+  }
+
+  /// 451. Sort Characters By Frequency
+  func frequencySort(_ s: String) -> String {
+    var frequencies = [Character: Int]()
+
+    for char in s {
+      frequencies[char, default: 0] += 1
+    }
+
+    return frequencies.sorted { lhs, rhs in
+      lhs.value > rhs.value
+    }.map { (char, occurrences) in
+      String(repeating: char, count: occurrences)
+    }.joined()
+  }
+
+  func numIdenticalPairs(_ nums: [Int]) -> Int {
+    var map = [Int: [Int]]()
+    var ans = 0
+
+    for (index, num) in nums.enumerated() {
+      if let indces = map[num] {
+        ans += indces.count
+      }
+
+      map[num, default: []].append(index)
     }
 
     return ans

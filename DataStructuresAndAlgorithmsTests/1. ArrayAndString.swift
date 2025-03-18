@@ -33,4 +33,16 @@ struct ArrayAndStringTests {
     #expect(sol.lengthOfLongestSubstringSlidingWindow("abcabcbb") == 3)
     #expect(sol.lengthOfLongestSubstringSlidingWindow(" ") == 1)
   }
+
+  @Test
+  func moveZeroes() async throws {
+    var input = [0,1,0,3,12]
+    sol.moveZeroes(&input)
+    #expect(input == [1, 3, 12, 0, 0])
+  }
+
+  @Test
+  func mergeIntervals() async throws {
+    #expect(sol.merge([[1,4],[0,4]]) == [[0,4]])
+  }
 }

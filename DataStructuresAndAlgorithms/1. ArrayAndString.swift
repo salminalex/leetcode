@@ -115,23 +115,73 @@ extension Solution {
   /// Given a string s, find the length of the longest substring
   /// without repeating characters.
   func lengthOfLongestSubstringSlidingWindow(_ s: String) -> Int {
-    guard !s.isEmpty else { return 0 }
+    guard !s.isEmpty else {
+      return 0
+    }
 
     var left = s.startIndex
-    var substring = s[left...left]
     var ans = 0
 
     for right in s.indices {
-      substring = s[left...right]
-
-      while Set(substring).count != substring.count {
+      while Set(s[left...right]).count != s[left...right].count {
         left = s.index(after: left)
-        substring = s[left...right]
       }
 
-      ans = max(ans, substring.count)
+      ans = max(ans, s[left...right].count)
     }
 
     return ans
+  }
+
+  // 283. Move Zeroes
+  func moveZeroes(_ nums: inout [Int]) {
+    var lastNonZeroIndex = 0
+    for i in 0..<nums.count {
+      if nums[i] != 0 {
+        nums.swapAt(i, lastNonZeroIndex)
+        lastNonZeroIndex += 1
+      }
+    }
+  }
+
+  // 242. Valid Anagram
+  func isAnagram(_ s: String, _ t: String) -> Bool {
+    func formTable(_ str: String) -> [Character: Int] {
+      var dict = [Character: Int](minimumCapacity: 26)
+      for char in str {
+        dict[char, default: 0] += 1
+      }
+      return dict
+    }
+
+
+
+    return formTable(s) == formTable(t)
+  }
+
+  // 56. Merge Intervals
+  func merge(_ intervals: [[Int]]) -> [[Int]] {
+    var res = [[Int]]()
+
+    for right in intervals.sorted(by: { $0[0] < $1[0] }) {
+      // if it's just first interval, just append it to res
+      guard let left = res.last else {
+        res.append(right)
+        continue
+      }
+
+      // if there is an intersection, merge left and right
+      if left[1] >= right[0] {
+        res.removeLast()
+        res.append([left[0], max(left[1], right[1])])
+      }
+
+      // otherwise just add new interval
+      else {
+        res.append(right)
+      }
+    }
+
+    return res
   }
 }
