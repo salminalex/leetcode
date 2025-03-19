@@ -154,12 +154,15 @@ extension Solution {
       return dict
     }
 
-
-
     return formTable(s) == formTable(t)
   }
 
   // 56. Merge Intervals
+  // Sorted intervals will have left boundary consistently increasing,
+  // iterating over sorted intervals will allow compare right boundary
+  // of previous interval with the left boundary of the next interval
+  // to verify intersection. max right of previous and next interval
+  // will be the right of the merged interval in case of intersection.
   func merge(_ intervals: [[Int]]) -> [[Int]] {
     var res = [[Int]]()
 
@@ -183,5 +186,104 @@ extension Solution {
     }
 
     return res
+  }
+
+  // 75. Sort Colors
+  // Form counts of every color and then reduce counts array into
+  // a resulting sorted colors array. At counts array index represents
+  // the color(0, 1, 2) and the value at this index represents count of
+  // this colors. We use counting sort algorithm here
+  func sortColors(_ nums: inout [Int]) {
+    var counts = [Int](repeating: 0, count: 3)
+
+    for num in nums {
+      counts[num] += 1
+    }
+
+    var res = [Int]()
+    for (num, count) in counts.enumerated() {
+      res += Array(repeating: num, count: count)
+    }
+
+    nums = res
+  }
+
+  // 1456. Maximum Number of Vowels in a Substring of Given Length
+  // Using sliding window keep window of size k, and keep track of
+  // current count of vowels every time window expands and shrinks
+  func maxVowels(_ s: String, _ k: Int) -> Int {
+    // == is faster than checking a set
+    func isVowel(_ char: Character) -> Bool {
+      char == "a" || char == "e" ||
+      char == "i" || char == "o" ||
+      char == "u"
+    }
+
+    let string = Array(s)
+    var left = 0
+    var ans = 0
+    var curr = 0
+
+    for right in string.indices {
+      if isVowel(string[right]) {
+        curr += 1
+      }
+
+      if right - left >= k {
+        if isVowel(string[left]) {
+          curr -= 1
+        }
+        left += 1
+      }
+
+      ans = max(ans, curr)
+    }
+
+    return ans
+  }
+
+  // 1208. Get Equal Substrings Within Budget
+  func equalSubstring(_ s: String, _ t: String, _ maxCost: Int) -> Int {
+    let first = Array(s)
+    let second = Array(t)
+
+    var currCredit = maxCost
+    var left = 0
+    var ans = 0
+
+    for right in first.indices {
+      currCredit -= abs(Int(first[right].asciiValue!) -  Int(second[right].asciiValue!))
+
+      while currCredit < 0 {
+        currCredit += abs(Int(first[left].asciiValue!) -  Int(second[left].asciiValue!))
+        left += 1
+      }
+
+      ans = max(ans, right - left + 1)
+    }
+
+    return ans
+  }
+
+  // 209. Minimum Size Subarray Sum
+  func minSubArrayLen(_ target: Int, _ nums: [Int]) -> Int {
+    var left = 0
+    var ans = Int.max
+    var curr = 0
+
+    for right in nums.indices {
+      curr += nums[right]
+
+      while curr - nums[left] >= target {
+        curr -= nums[left]
+        left += 1
+      }
+
+      if curr >= target {
+        ans = min(ans, right - left + 1)
+      }
+    }
+
+    return ans == Int.max ? 0 : ans
   }
 }

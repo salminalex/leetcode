@@ -45,4 +45,25 @@ struct ArrayAndStringTests {
   func mergeIntervals() async throws {
     #expect(sol.merge([[1,4],[0,4]]) == [[0,4]])
   }
+
+  @Test
+  func minSubArrayLen() async throws {
+    #expect(sol.minSubArrayLen(7, [2,3,1,2,4,3]) == 2)
+    #expect(sol.minSubArrayLen(4, [1,4,4]) == 1)
+    #expect(sol.minSubArrayLen(15, [1,2,3,4,5]) == 5)
+  }
+
+  @Test
+  func maxVowels() async throws {
+    #expect(sol.maxVowels("abciiidef", 3) == 3)
+    #expect(sol.maxVowels("aeiou", 2) == 2)
+    #expect(sol.maxVowels("leetcode", 3) == 2)
+  }
+
+  @Test
+  func equalSubstring() async throws {
+    #expect(sol.equalSubstring("abcd", "bcdf", 3) == 3)
+    #expect(sol.maxVowels("aeiou", 2) == 2)
+    #expect(sol.maxVowels("leetcode", 3) == 2)
+  }
 }
