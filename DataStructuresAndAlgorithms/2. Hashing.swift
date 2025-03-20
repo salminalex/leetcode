@@ -492,4 +492,34 @@ extension Solution {
 
     return ans
   }
+
+  // 13. Roman to Integer
+  func romanToInt(_ s: String) -> Int {
+    let map: [Character: Int] = [
+      "I": 1,
+      "V": 5,
+      "X": 10,
+      "L": 50,
+      "C": 100,
+      "D": 500,
+      "M": 1000
+    ]
+
+    var str = s
+    str.replace("IV", with: "IIII")
+    str.replace("IX", with: "VIIII")
+    str.replace("XL", with: "XXXX")
+    str.replace("XC", with: "LXXXX")
+    str.replace("CD", with: "CCCC")
+    str.replace("CM", with: "DCCCC")
+
+    var ans = 0
+    for char in s {
+      if let num = map[char] {
+        ans += num
+      }
+    }
+
+    return ans
+  }
 }
