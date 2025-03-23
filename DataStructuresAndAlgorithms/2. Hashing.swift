@@ -160,12 +160,16 @@ extension Solution {
   }
 
   /// 49. Group Anagrams
-  /// Given an array of strings strs, group the anagrams
-  /// together. You can return the answer in any order.
   func groupAnagrams(_ strs: [String]) -> [[String]] {
-    var anagrams: [[Character]: [String]] = [:]
+    let aVal = Character("a").asciiValue!
+    var anagrams = [[Int]: [String]]()
+
     for str in strs {
-      anagrams[str.sorted(), default: []].append(str)
+      var srtArray = Array(repeating: 0, count: 26)
+      for char in str.utf8 {
+        srtArray[Int(char - aVal)] += 1
+      }
+      anagrams[srtArray, default: []].append(str)
     }
     return Array(anagrams.values)
   }
@@ -521,5 +525,58 @@ extension Solution {
     }
 
     return ans
+  }
+
+  // 438. Find All Anagrams in a String
+  func findAnagrams(_ s: String, _ p: String) -> [Int] {
+    let s = Array(s)
+    let p = Array(p)
+
+    let pDict = Dictionary(p.map { ($0, 1) }, uniquingKeysWith: +)
+    var curr = Dictionary<Character, Int>()
+
+    var left = 0
+    var ans = [Int]()
+
+    for right in s.indices {
+      curr[s[right], default: 0] += 1
+
+      if right - left >= p.count {
+        let removingChar = s[left]
+        if curr[removingChar] == 1 {
+          curr[removingChar] = nil
+        } else {
+          curr[removingChar]! -= 1
+        }
+        left += 1
+      }
+
+      if pDict == curr {
+        ans.append(left)
+      }
+    }
+
+    return ans
+  }
+
+  // 824. Goat Latin
+  func toGoatLatin(_ sentence: String) -> String {
+    let vovels = Set("aeiou")
+    var res = [String]()
+
+    for (index, word) in sentence.components(separatedBy: .whitespaces).enumerated() {
+      var token = word
+
+      if !vovels.contains(token.first!.lowercased()) {
+        let first = token.removeFirst()
+        token.append(first)
+      }
+
+      token += "ma"
+      token += String(repeating: "a", count: index + 1)
+      res.append(token)
+    }
+
+    return res.joined(separator: " ")
   }
 }

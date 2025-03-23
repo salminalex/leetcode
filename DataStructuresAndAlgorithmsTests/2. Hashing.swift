@@ -77,4 +77,10 @@ struct HashingTests {
   func numIdenticalPairs() async throws {
     #expect(sol.numIdenticalPairs([1,2,3,1,1,3]) == 4)
   }
+
+  @Test
+  func findAnagrams() async throws {
+    #expect(sol.findAnagrams("cbaebabacd", "abc") == [0,6])
+
+  }
 }
